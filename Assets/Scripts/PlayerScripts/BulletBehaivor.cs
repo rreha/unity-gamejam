@@ -1,29 +1,48 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BulletBehaivor : MonoBehaviour
 {
-[SerializeField] public float bullet_Speed = 10f;
-[SerializeField] public float bullet_Range = 10f; // Merminin menzili
-public LayerMask whatDestroysBullet;
+    [SerializeField] public float bullet_Speed = 10f;
+    [SerializeField] public float bullet_Range = 10f; // Merminin menzili
 
+    public LayerMask whatDestroysBullet;
+    
 
     private Rigidbody2D rb;
     private Vector3 startPosition; // Merminin başlangıç pozisyonu
-
+    public float bulletdamage = 5f;
+    SpriteRenderer rbSprite;
+    public enum BulletType
+    {
+        fire,
+        electric,
+        water
+    }
+    public BulletType bulletType;
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        SetStraightVelocity();
+        rbSprite = rb.GetComponent<SpriteRenderer>();
+        //set velocicty based on bullet type
+        InitializeBulletStats();
         startPosition = transform.position; // Merminin başlangıç pozisyonunu kaydet
+        
+    }
 
+    private void InitializeBulletStats()
+    {
+        
+            SetStraightVelocity();
     }
 private void Update()
     {
         CheckRange();
     }
 
+   
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if((whatDestroysBullet.value & (1<< collision.gameObject.layer))> 0)
@@ -35,7 +54,11 @@ private void Update()
             //ScreenShake gíbi seyler eklenebilir
 
             //damage enemy
-
+            IDamagable iDamageable = collision.gameObject.GetComponent<IDamagable>();
+           if(iDamageable!= null)
+            {
+               iDamageable.Damage(bulletdamage);
+            }
 
 
             //destroy the bullet

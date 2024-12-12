@@ -3,27 +3,153 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static BulletBehaivor;
+
+[System.Serializable]
+public class  Player
+{
+    [SerializeField]public float maxHp;
+    // New stats
+    [SerializeField] public float maxMana = 100f;
+    [SerializeField] public float currentMana;
+    [SerializeField] public float manaRegenRate = 5f; // Mana per second
+    [SerializeField] public float attackSpeed = 1f; // Attacks per second
+    public Player()
+    {
+        currentMana = maxMana;
+    }
+}
 
 public class PlayerAimAndShoot : MonoBehaviour
 {
-    public GameObject bullet;
-    private	 GameObject bulletInst;
+    [Header("PlayerStats")]
+    public Player playerStats;
+
+
+
+    [Header("AimAndShoot")]
+    public GameObject firebullet;
+    public GameObject electricbullet;
+    public GameObject waterbullet;
+
+
+    private GameObject bulletInst;
     public Transform bulletSpawnPoint;
     public Camera mainCamera;
     public Transform weaponPivot;
- private void HandleGunShooting()
- {
-    if(Mouse.current.leftButton.wasPressedThisFrame)
+    BulletType bulletType = BulletType.fire;
+
+    // Attack speed management
+    private float attackCooldown = 0f;
+
+    // Mana cost per bullet type
+    public float fireManaCost = 7;
+    public float electricManaCost = 7;
+    public float waterManaCost = 7;
+
+    private void Start()
     {
-      //spawn bullet
-      bulletInst = Instantiate(bullet, bulletSpawnPoint.position, weaponPivot.rotation);
+        if (playerStats == null)
+        {
+            playerStats = new Player();
+        }
     }
- }
-  void Update()
- {
-    HandleGunShooting();
-    Aim();
- }
+
+    private void HandleGunShooting()
+    {
+        // Check if the player can attack based on attack speed
+        if (attackCooldown > 0f)
+            return;
+
+        if (Input.GetMouseButton(0))
+        {
+            // Determine mana cost based on bullet type
+            float manaCost = 0f;
+            switch (bulletType)
+            {
+                case BulletType.fire:
+                    manaCost = fireManaCost;
+                    break;
+                case BulletType.electric:
+                    manaCost = electricManaCost;
+                    break;
+                case BulletType.water:
+                    manaCost = waterManaCost;
+                    break;
+            }
+
+            // Check if the player has enough mana
+            if (playerStats.currentMana < manaCost)
+            {
+                Debug.Log("Not enough mana to shoot.");
+                return;
+            }
+
+            // Deduct mana
+            playerStats.currentMana -= manaCost;
+
+            // Spawn bullet based on type
+            switch (bulletType)
+            {
+                case BulletType.fire:
+                    Debug.Log("Fire shot fired.");
+                    bulletInst = Instantiate(firebullet, bulletSpawnPoint.position, weaponPivot.rotation);
+                    break;
+                case BulletType.electric:
+                    Debug.Log("Electric shot fired.");
+                    bulletInst = Instantiate(electricbullet, bulletSpawnPoint.position, weaponPivot.rotation);
+                    break;
+                case BulletType.water:
+                    Debug.Log("Water shot fired.");
+                    bulletInst = Instantiate(waterbullet, bulletSpawnPoint.position, weaponPivot.rotation);
+                    break;
+            }
+
+            // Reset attack cooldown
+            attackCooldown = 1f / playerStats.attackSpeed;
+        }
+    }
+    void Update()
+    {
+        // Handle attack cooldown
+        if (attackCooldown > 0f)
+        {
+            attackCooldown -= Time.deltaTime;
+        }
+
+        // Handle mana regeneration
+        RegenerateMana();
+
+        // Handle bullet type switching
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            bulletType = BulletType.fire;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            bulletType = BulletType.electric;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            bulletType = BulletType.water;
+        }
+
+        HandleGunShooting();
+        Aim();
+
+        // Optional: Debug logs for mana and attack speed
+        // Debug.Log($"Mana: {playerStats.currentMana}/{playerStats.maxMana}");
+        // Debug.Log($"Attack Cooldown: {attackCooldown}");
+    }
+
+    private void RegenerateMana()
+    {
+        if (playerStats.currentMana < playerStats.maxMana)
+        {
+            playerStats.currentMana += playerStats.manaRegenRate * Time.deltaTime;
+            playerStats.currentMana = Mathf.Min(playerStats.currentMana, playerStats.maxMana);
+        }
+    }
     private void Aim()
     {
         // Mouse pozisyonunu dünya pozisyonuna çevir
@@ -42,4 +168,9 @@ public class PlayerAimAndShoot : MonoBehaviour
         // Silah pivotunu döndür
         weaponPivot.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
     }
+
+
+
+
+
 }
