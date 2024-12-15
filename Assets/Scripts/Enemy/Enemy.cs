@@ -10,12 +10,23 @@ public class Enemy : MonoBehaviour, IDamagable
     void IDamagable.Damage(float damageAmount)
     {
         currentHealth -= damageAmount;
+        Debug.Log($"Enemy damaged! Current health: {currentHealth}");
 
         if(currentHealth<=0 )
         {
-            Destroy(gameObject);
+           StartCoroutine(Respawn());
+           Destroy(gameObject);
         }
     }
+
+    private IEnumerator Respawn()
+{
+    gameObject.SetActive(false); // Deactivate enemy instead of destroying it
+    yield return new WaitForSeconds(5f); // Wait for 5 seconds before respawning
+    
+    currentHealth = maxHealth; // Reset health
+    gameObject.SetActive(true); // Reactivate enemy
+}
 
     // Start is called before the first frame update
     void Start()
