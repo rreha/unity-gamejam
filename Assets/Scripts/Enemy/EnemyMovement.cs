@@ -5,17 +5,21 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     Transform player;
-    public float moveSpeed; // Hareket hızı
+    public float baseMoveSpeed = 5f; // Temel hareket hızı
+    private float currentMoveSpeed; // Geçerli hareket hızı
     private Rigidbody2D rb; // RigidBody referansı
     private Vector2 movement; // Hareket yönü
 
     void Start()
     {
-        // Player'ı bul
+        // Oyuncuyu bul
         player = FindObjectOfType<PlayerMovement>().transform;
 
-        // RigidBody'yi al
+        // RigidBody2D bileşenini al
         rb = GetComponent<Rigidbody2D>();
+
+        // Geçerli hareket hızını başlat
+        currentMoveSpeed = baseMoveSpeed;
     }
 
     void Update()
@@ -27,7 +31,13 @@ public class EnemyMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        // RigidBody kullanarak hareketi uygula
-        rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+        // Hareketi uygula
+        rb.MovePosition(rb.position + movement * currentMoveSpeed * Time.fixedDeltaTime);
+    }
+
+    // Hareket hızını değiştiren metod
+    public void SetSpeedMultiplier(float multiplier)
+    {
+        currentMoveSpeed = baseMoveSpeed * multiplier;
     }
 }

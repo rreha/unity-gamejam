@@ -4,6 +4,13 @@ using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
+public enum BulletType
+{
+    fire,
+    electric,
+    water
+}
+
 public class BulletBehaivor : MonoBehaviour
 {
     [SerializeField] public float bullet_Speed = 10f;
@@ -16,12 +23,7 @@ public class BulletBehaivor : MonoBehaviour
     private Vector3 startPosition; // Merminin başlangıç pozisyonu
     public float bulletdamage = 10f;
     SpriteRenderer rbSprite;
-    public enum BulletType
-    {
-        fire,
-        electric,
-        water
-    }
+
     public BulletType bulletType;
     private void Start()
     {
@@ -45,32 +47,14 @@ public class BulletBehaivor : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if((whatDestroysBullet.value & (1<< collision.gameObject.layer))> 0)
+        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+        if (enemy != null)
         {
-            //spawn particles
-
-            //play sound FX
-
-            //ScreenShake gíbi seyler eklenebilir
-
-            //damage enemy
-            IDamagable iDamageable = collision.gameObject.GetComponent<IDamagable>();
-            if (iDamageable != null)
-            {
-                if (bulletType == BulletType.fire)
-                {
-                    Debug.Log("Applying fire damage");
-                    StartCoroutine(ApplyFireDamage(iDamageable));
-                }
-                else
-                {
-                    iDamageable.Damage(bulletdamage); 
-                }
-            }
-
-            //destroy the bullet
-            Destroy(gameObject);
+            enemy.OnHit(bulletType, bulletdamage);
         }
+
+        // Mermi çarptıktan sonra yok oluyor
+        Destroy(gameObject);
     }
 
     private IEnumerator ApplyFireDamage(IDamagable target)
