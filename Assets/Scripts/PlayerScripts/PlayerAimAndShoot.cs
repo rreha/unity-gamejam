@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static BulletBehaivor;
+using static BulletBehavior;
 
 [System.Serializable]
 public class  Player
@@ -37,7 +37,7 @@ public class PlayerAimAndShoot : MonoBehaviour
     public Transform bulletSpawnPoint;
     public Camera mainCamera;
     public Transform weaponPivot;
-    BulletType bulletType = BulletType.fire;
+    BulletType bulletType = BulletType.Fire;
 
     // Attack speed management
     private float attackCooldown = 0f;
@@ -67,13 +67,13 @@ public class PlayerAimAndShoot : MonoBehaviour
             float manaCost = 0f;
             switch (bulletType)
             {
-                case BulletType.fire:
+                case BulletType.Fire:
                     manaCost = fireManaCost;
                     break;
-                case BulletType.electric:
+                case BulletType.Electric:
                     manaCost = electricManaCost;
                     break;
-                case BulletType.water:
+                case BulletType.Water:
                     manaCost = waterManaCost;
                     break;
             }
@@ -91,15 +91,15 @@ public class PlayerAimAndShoot : MonoBehaviour
             // Spawn bullet based on type
             switch (bulletType)
             {
-                case BulletType.fire:
+                case BulletType.Fire:
                     Debug.Log("Fire shot fired.");
                     bulletInst = Instantiate(firebullet, bulletSpawnPoint.position, weaponPivot.rotation);
                     break;
-                case BulletType.electric:
+                case BulletType.Electric:
                     Debug.Log("Electric shot fired.");
                     bulletInst = Instantiate(electricbullet, bulletSpawnPoint.position, weaponPivot.rotation);
                     break;
-                case BulletType.water:
+                case BulletType.Water:
                     Debug.Log("Water shot fired.");
                     bulletInst = Instantiate(waterbullet, bulletSpawnPoint.position, weaponPivot.rotation);
                     break;
@@ -123,15 +123,15 @@ public class PlayerAimAndShoot : MonoBehaviour
         // Handle bullet type switching
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            bulletType = BulletType.fire;
+            bulletType = BulletType.Fire;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            bulletType = BulletType.electric;
+            bulletType = BulletType.Electric;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            bulletType = BulletType.water;
+            bulletType = BulletType.Water;
         }
 
         HandleGunShooting();

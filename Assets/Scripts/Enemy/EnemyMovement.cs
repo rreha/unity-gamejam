@@ -7,7 +7,7 @@ public class EnemyMovement : MonoBehaviour
     Transform player;
     public float baseMoveSpeed = 5f; // Temel hareket hızı
     private float currentMoveSpeed; // Geçerli hareket hızı
-    private Rigidbody2D rb; // RigidBody referansı
+    private Rigidbody2D rb; // Rigidbody2D referansı
     private Vector2 movement; // Hareket yönü
 
     void Start()
@@ -15,8 +15,12 @@ public class EnemyMovement : MonoBehaviour
         // Oyuncuyu bul
         player = FindObjectOfType<PlayerMovement>().transform;
 
-        // RigidBody2D bileşenini al
+        // Rigidbody2D bileşenini al
         rb = GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            Debug.LogError("Rigidbody2D component not found on Enemy.");
+        }
 
         // Geçerli hareket hızını başlat
         currentMoveSpeed = baseMoveSpeed;
@@ -39,5 +43,6 @@ public class EnemyMovement : MonoBehaviour
     public void SetSpeedMultiplier(float multiplier)
     {
         currentMoveSpeed = baseMoveSpeed * multiplier;
+        Debug.Log($"{gameObject.name} speed multiplier set to {multiplier}. Current speed: {currentMoveSpeed}");
     }
 }

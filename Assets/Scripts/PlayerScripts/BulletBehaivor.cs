@@ -1,45 +1,40 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
-
 public enum BulletType
 {
-    fire,
-    electric,
-    water
+    Fire,
+    Electric,
+    Water
 }
 
-public class BulletBehaivor : MonoBehaviour
+public class BulletBehavior : MonoBehaviour
 {
     [SerializeField] public float bullet_Speed = 10f;
     [SerializeField] public float bullet_Range = 10f; // Merminin menzili
 
     public LayerMask whatDestroysBullet;
-    
 
     private Rigidbody2D rb;
     private Vector3 startPosition; // Merminin başlangıç pozisyonu
-    public float bulletdamage = 10f;
+    public float bulletDamage = 10f;
     SpriteRenderer rbSprite;
-
     public BulletType bulletType;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         rbSprite = rb.GetComponent<SpriteRenderer>();
-        //set velocicty based on bullet type
+        // Merminin yönünü ve hızını ayarla
         InitializeBulletStats();
         startPosition = transform.position; // Merminin başlangıç pozisyonunu kaydet
-        
     }
 
     private void InitializeBulletStats()
     {
-        
-            SetStraightVelocity();
+        SetStraightVelocity();
     }
+
     private void Update()
     {
         CheckRange();
@@ -50,24 +45,11 @@ public class BulletBehaivor : MonoBehaviour
         Enemy enemy = collision.gameObject.GetComponent<Enemy>();
         if (enemy != null)
         {
-            enemy.OnHit(bulletType, bulletdamage);
+            enemy.OnHit(bulletType, bulletDamage);
         }
 
         // Mermi çarptıktan sonra yok oluyor
         Destroy(gameObject);
-    }
-
-    private IEnumerator ApplyFireDamage(IDamagable target)
-    {
-        float duration = 5f; // Duration of the fire effect in seconds
-        float interval = 1f; // Damage interval in seconds
-        int ticks = Mathf.FloorToInt(duration / interval); // Number of times to apply damage
-
-        for (int i = 0; i < ticks; i++)
-        {
-            target.Damage(bulletdamage / ticks); // Apply damage per tick
-            yield return new WaitForSeconds(interval); // Wait before applying next damage
-        }
     }
 
     private void CheckRange()
@@ -81,6 +63,7 @@ public class BulletBehaivor : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     private void SetStraightVelocity()
     {
         rb.velocity = transform.right * bullet_Speed;

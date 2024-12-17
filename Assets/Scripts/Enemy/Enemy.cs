@@ -54,10 +54,10 @@ public class Enemy : MonoBehaviour, IDamagable
 
         switch (bulletType)
         {
-            case BulletType.fire:
+            case BulletType.Fire:
                 ApplyFireEffect();
                 break;
-            case BulletType.water:
+            case BulletType.Water:
                 ApplyWaterEffect();
                 break;
             // Diðer mermi türlerini gerektiðinde ekleyebilirsiniz
