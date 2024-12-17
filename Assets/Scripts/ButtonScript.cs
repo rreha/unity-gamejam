@@ -21,7 +21,7 @@ public class ButtonScript : MonoBehaviour
     }
     public void loadGame()
     {
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene(3);
     }
 
     public void loadSettings()

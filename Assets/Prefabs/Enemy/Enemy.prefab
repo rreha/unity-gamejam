@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 663514579277052495}
   - component: {fileID: 8614305558005709486}
   - component: {fileID: 1169766664014566239}
-  - component: {fileID: 6412683834442199875}
+  - component: {fileID: -3531586764805108983}
   - component: {fileID: 3687131979847439411}
   m_Layer: 6
   m_Name: Enemy
@@ -175,7 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 10
   currentHealth: 0
---- !u!114 &6412683834442199875
+--- !u!114 &-3531586764805108983
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -188,7 +188,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
-  experience: 0
 --- !u!95 &3687131979847439411
 Animator:
   serializedVersion: 5
