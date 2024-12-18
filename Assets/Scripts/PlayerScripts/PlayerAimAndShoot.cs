@@ -37,7 +37,7 @@ public class PlayerAimAndShoot : MonoBehaviour
     public Transform bulletSpawnPoint;
     public Camera mainCamera;
     public Transform weaponPivot;
-    BulletType bulletType = BulletType.Fire;
+    BulletType bulletType = BulletType.fire;
 
     // Attack speed management
     private float attackCooldown = 0f;
@@ -67,13 +67,13 @@ public class PlayerAimAndShoot : MonoBehaviour
             float manaCost = 0f;
             switch (bulletType)
             {
-                case BulletType.Fire:
+                case BulletType.fire:
                     manaCost = fireManaCost;
                     break;
-                case BulletType.Electric:
+                case BulletType.electric:
                     manaCost = electricManaCost;
                     break;
-                case BulletType.Water:
+                case BulletType.water:
                     manaCost = waterManaCost;
                     break;
             }
@@ -91,15 +91,15 @@ public class PlayerAimAndShoot : MonoBehaviour
             // Spawn bullet based on type
             switch (bulletType)
             {
-                case BulletType.Fire:
+                case BulletType.fire:
                     Debug.Log("Fire shot fired.");
                     bulletInst = Instantiate(firebullet, bulletSpawnPoint.position, weaponPivot.rotation);
                     break;
-                case BulletType.Electric:
+                case BulletType.electric:
                     Debug.Log("Electric shot fired.");
                     bulletInst = Instantiate(electricbullet, bulletSpawnPoint.position, weaponPivot.rotation);
                     break;
-                case BulletType.Water:
+                case BulletType.water:
                     Debug.Log("Water shot fired.");
                     bulletInst = Instantiate(waterbullet, bulletSpawnPoint.position, weaponPivot.rotation);
                     break;
@@ -123,15 +123,15 @@ public class PlayerAimAndShoot : MonoBehaviour
         // Handle bullet type switching
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            bulletType = BulletType.Fire;
+            bulletType = BulletType.fire;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            bulletType = BulletType.Electric;
+            bulletType = BulletType.electric;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            bulletType = BulletType.Water;
+            bulletType = BulletType.water;
         }
 
         HandleGunShooting();

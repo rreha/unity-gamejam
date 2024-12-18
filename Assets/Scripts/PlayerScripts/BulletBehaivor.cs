@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 public enum BulletType
 {
-    Fire,
-    Electric,
-    Water
+    none,
+    fire,
+    water,
+    electric
 }
-
 public class BulletBehavior : MonoBehaviour
 {
     [SerializeField] public float bullet_Speed = 10f;

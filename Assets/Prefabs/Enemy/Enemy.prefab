@@ -174,7 +174,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 10
-  currentHealth: 0
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  chainTimes: 1
+  waterElectricDuration: 7
+  waterElectricDamage: 3
+  waterElectricRadius: 5
 --- !u!114 &-3531586764805108983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,7 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d0851ec89e567b4293c80e821197061, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  baseMoveSpeed: 5
 --- !u!95 &3687131979847439411
 Animator:
   serializedVersion: 5

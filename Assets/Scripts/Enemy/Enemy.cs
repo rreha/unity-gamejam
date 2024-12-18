@@ -4,14 +4,16 @@ using UnityEngine;
 
 // BulletType enum’unun doðru tanýmlandýðýndan emin olun
 
+
 public class Enemy : MonoBehaviour, IDamagable
 {
     [SerializeField] public float maxHealth = 10f;
     private float currentHealth;
-
+    public LayerMask enemyLayer;
     // Coroutine referanslarý
     private Coroutine fireCoroutine;
     private Coroutine waterCoroutine;
+    private Coroutine electricCoroutine;
     private Coroutine steamCoroutine;
 
     // Fire efekti parametreleri
@@ -21,9 +23,15 @@ public class Enemy : MonoBehaviour, IDamagable
     // Water efekti parametreleri
     private float waterDuration = 5f;
 
+    // Electric efekti parametreleri
+    private float electricDuration = 5f;
+    private float electricChainDamage = 3f;
+    public int chainTimes = 1; // Zincirleme sayýsýný belirlemek için
+
     // Steam efekti parametreleri
-    private float steamDuration = 5f;
-    private float speedMultiplier = 0.5f; // %50 hýz
+    private float steamDuration = 8f;
+    private float steamDamagePerSecond = 1f;
+    private float speedReductionFactor = 0.8f; // %80 hýz azaltma
 
     // Referanslar
     private EnemyMovement enemyMovement;
@@ -31,7 +39,22 @@ public class Enemy : MonoBehaviour, IDamagable
     // Efekt durum bayraklarý
     private bool isFireActive = false;
     private bool isWaterActive = false;
+    private bool isElectricActive = false;
     private bool isSteamActive = false;
+
+
+    // Explosion efekti parametreleri
+    private float explosionDamage = 15f;
+    private float explosionRadius = 5f;
+
+
+    // Coroutine referansý
+    private Coroutine waterElectricCoroutine;
+
+    // Water-Electric efekt parametreleri
+    [SerializeField] private int waterElectricDuration = 7; // Efektin süresi (saniye)
+    [SerializeField] private float waterElectricDamage = 3f; // Her saniye verilecek hasar miktarý
+    [SerializeField] private float waterElectricRadius = 5f; // Zincir hasarýnýn uygulanacaðý yarýçap
 
     void Start()
     {
@@ -54,11 +77,14 @@ public class Enemy : MonoBehaviour, IDamagable
 
         switch (bulletType)
         {
-            case BulletType.Fire:
+            case BulletType.fire:
                 ApplyFireEffect();
                 break;
-            case BulletType.Water:
+            case BulletType.water:
                 ApplyWaterEffect();
+                break;
+            case BulletType.electric:
+                ApplyElectricEffect();
                 break;
             // Diðer mermi türlerini gerektiðinde ekleyebilirsiniz
             default:
@@ -68,123 +94,70 @@ public class Enemy : MonoBehaviour, IDamagable
         // Merminin verdiði hasarý uygula
         Damage(damageAmount);
 
-        // Efektlerin uygulanmasýný hemen kontrol et
-        CheckAndApplySteam();
-    }
-
-    private void ApplyFireEffect()
-    {
-        if (fireCoroutine != null)
+        // Fire ve Water etkileri aktifse Steam efektini uygula
+        if (isFireActive && isWaterActive && !isSteamActive)
         {
-            StopCoroutine(fireCoroutine);
+            ApplySteamEffect();
         }
-        fireCoroutine = StartCoroutine(FireDamageOverTime());
-        LogCurrentEffects(); // Fire efekti uygulandýðýnda logla
+        // Fire ve Electric etkileri aktifse Explosion efektini uygula
+        if (isFireActive && isElectricActive)
+        {
+            ApplyExplosionEffect();
+        }
+
+        // Su ve Elektrik etkileri aktifse Water-Electric efektini uygula
+        if (isWaterActive && isElectricActive && waterElectricCoroutine == null)
+        {
+            waterElectricCoroutine = StartCoroutine(WaterElectricEffectCoroutine());
+        }
     }
 
-    private IEnumerator FireDamageOverTime()
+    private IEnumerator WaterElectricEffectCoroutine()
     {
-        isFireActive = true;
-        LogCurrentEffects(); // Fire efekti aktif olduðunda logla
-        float elapsed = 0f;
-        while (elapsed < fireDuration && isFireActive)
+        Debug.Log($"{gameObject.name} is affected by the Water-Electric combination!");
+        ClearEffects();
+        for (int i = 0; i < waterElectricDuration; i++)
         {
-            Damage(fireDamagePerSecond);
+            // Kendisine hasar uygula
+            Debug.Log($"{gameObject.name} receives {waterElectricDamage} chain damage due to Water-Electric effect.");
+            TakeDamage(waterElectricDamage);
+
+            // Belirtilen yarýçap içinde bulunan tüm düþmanlarý bul
+            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, waterElectricRadius, enemyLayer);
+
+            foreach (Collider2D enemyCollider in hitEnemies)
+            {
+                Enemy enemy = enemyCollider.GetComponent<Enemy>();
+                if (enemy != null && enemy != this)
+                {
+                    Debug.Log($"{gameObject.name}'s Water-Electric effect deals {waterElectricDamage} damage to {enemy.gameObject.name}.");
+                    enemy.Damage(waterElectricDamage);
+                }
+            }
+
+            // 1 saniye bekle
             yield return new WaitForSeconds(1f);
-            elapsed += 1f;
         }
-        isFireActive = false;
-        fireCoroutine = null;
-        LogCurrentEffects(); // Fire efekti süresi dolduðunda logla
-        CheckAndApplySteam();
-    }
 
-    private void ApplyWaterEffect()
+        // Coroutine tamamlandýðýnda referansý sýfýrla
+        waterElectricCoroutine = null;
+    }
+    private void ApplyExplosionEffect()
     {
-        if (waterCoroutine != null)
+        ClearEffects();
+        // Patlama yarýçapý içinde bulunan tüm düþmanlarý bul
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
+
+        foreach (Collider2D enemyCollider in hitEnemies)
         {
-            StopCoroutine(waterCoroutine);
-        }
-        waterCoroutine = StartCoroutine(WaterEffectDuration());
-        LogCurrentEffects(); // Water efekti uygulandýðýnda logla
-    }
-
-    private IEnumerator WaterEffectDuration()
-    {
-        isWaterActive = true;
-        LogCurrentEffects(); // Water efekti aktif olduðunda logla
-        yield return new WaitForSeconds(waterDuration);
-        isWaterActive = false;
-        waterCoroutine = null;
-        LogCurrentEffects(); // Water efekti süresi dolduðunda logla
-        CheckAndApplySteam();
-    }
-
-    private void CheckAndApplySteam()
-    {
-        // Hem Fire hem de Water efektleri aktifse Steam uygulamaya baþla
-        if (isFireActive && isWaterActive)
-        {
-            if (!isSteamActive)
+            Enemy enemy = enemyCollider.GetComponent<Enemy>();
+            if (enemy != null && enemy != this)
             {
-                ApplySteamEffect();
-            }
-        }
-        else
-        {
-            // Eðer Steam aktif ve Fire veya Water artýk aktif deðilse Steam'i kaldýr
-            if (isSteamActive)
-            {
-                StopSteamEffect();
+                Debug.Log($"{gameObject.name}'s explosion deals {explosionDamage} damage to {enemy.gameObject.name}.");
+                enemy.Damage(explosionDamage);
             }
         }
     }
-
-    private void ApplySteamEffect()
-    {
-        steamCoroutine = StartCoroutine(SteamEffectDuration());
-        LogCurrentEffects(); // Steam efekti uygulandýðýnda logla
-    }
-
-    private IEnumerator SteamEffectDuration()
-    {
-        isSteamActive = true;
-        LogCurrentEffects(); // Steam efekti aktif olduðunda logla
-
-        // Hareket hýzýný yavaþlat
-        if (enemyMovement != null)
-        {
-            enemyMovement.SetSpeedMultiplier(speedMultiplier);
-        }
-
-        yield return new WaitForSeconds(steamDuration);
-
-        // Hareket hýzýný normale döndür
-        if (enemyMovement != null)
-        {
-            enemyMovement.SetSpeedMultiplier(1f);
-        }
-
-        isSteamActive = false;
-        steamCoroutine = null;
-        LogCurrentEffects(); // Steam efekti süresi dolduðunda logla
-    }
-
-    private void StopSteamEffect()
-    {
-        if (steamCoroutine != null)
-        {
-            StopCoroutine(steamCoroutine);
-            steamCoroutine = null;
-        }
-        if (enemyMovement != null)
-        {
-            enemyMovement.SetSpeedMultiplier(1f);
-        }
-        isSteamActive = false;
-        LogCurrentEffects(); // Steam efekti kaldýrýldýðýnda logla
-    }
-
     // IDamagable arayüzünden gelen Damage metodu
     public void Damage(float damageAmount)
     {
@@ -209,20 +182,201 @@ public class Enemy : MonoBehaviour, IDamagable
         Destroy(gameObject);
     }
 
-    // Efektlerin durumlarýný loglayan metot
+    // Fire efektini uygulayan metod
+    private void ApplyFireEffect()
+    {
+        // Eðer zaten fire efekti aktifse, mevcut coroutine'i durdur
+        if (fireCoroutine != null)
+        {
+            StopCoroutine(fireCoroutine);
+        }
+
+        fireCoroutine = StartCoroutine(FireEffectCoroutine());
+    }
+
+    private IEnumerator FireEffectCoroutine()
+    {
+        isFireActive = true;
+        Debug.Log($"{gameObject.name} is on fire!");
+
+        float elapsed = 0f;
+
+        while (elapsed < fireDuration)
+        {
+            TakeDamage(fireDamagePerSecond);
+            yield return new WaitForSeconds(1f);
+            elapsed += 1f;
+        }
+
+        isFireActive = false;
+        Debug.Log($"{gameObject.name} is no longer on fire.");
+        fireCoroutine = null;
+    }
+
+    // Water efektini uygulayan metod
+    private void ApplyWaterEffect()
+    {
+        // Eðer zaten water efekti aktifse, mevcut coroutine'i durdur
+        if (waterCoroutine != null)
+        {
+            StopCoroutine(waterCoroutine);
+        }
+
+        waterCoroutine = StartCoroutine(WaterEffectCoroutine());
+    }
+
+    private IEnumerator WaterEffectCoroutine()
+    {
+        isWaterActive = true;
+        Debug.Log($"{gameObject.name} is affected by water!");
+
+        yield return new WaitForSeconds(waterDuration);
+
+        isWaterActive = false;
+        Debug.Log($"{gameObject.name} is no longer affected by water.");
+        waterCoroutine = null;
+    }
+
+    // Electric efektini uygulayan metod
+    private void ApplyElectricEffect()
+    {
+        // Eðer zaten electric efekti aktifse, mevcut coroutine'i durdur
+        if (electricCoroutine != null)
+        {
+            StopCoroutine(electricCoroutine);
+        }
+        ApplyElectricChainDamage();
+        electricCoroutine = StartCoroutine(ElectricEffectCoroutine());
+
+       
+    }
+
+    private IEnumerator ElectricEffectCoroutine()
+    {
+        isElectricActive = true;
+        Debug.Log($"{gameObject.name} is electrified!");
+
+        yield return new WaitForSeconds(electricDuration);
+
+        isElectricActive = false;
+        Debug.Log($"{gameObject.name} is no longer electrified.");
+        electricCoroutine = null;
+    }
+
+    private void ApplyElectricChainDamage()
+    {
+        // Tüm Enemy objelerini bul
+        Enemy[] allEnemies = FindObjectsOfType<Enemy>();
+
+        // Kendini hariç tut
+        List<Enemy> otherEnemies = new List<Enemy>();
+        foreach (var enemy in allEnemies)
+        {
+            if (enemy != this)
+            {
+                otherEnemies.Add(enemy);
+            }
+        }
+
+        if (otherEnemies.Count == 0)
+        {
+            Debug.Log("No other enemies found to apply electric chain damage.");
+            return;
+        }
+
+        // Diðer düþmanlarý mesafeye göre sýralayýn
+        otherEnemies.Sort((a, b) =>
+            Vector3.Distance(transform.position, a.transform.position)
+            .CompareTo(Vector3.Distance(transform.position, b.transform.position)));
+
+        // Zincirleme hasar vereceðiniz düþman sayýsýný belirleyin
+        int targets = Mathf.Min(chainTimes, otherEnemies.Count);
+
+        for (int i = 0; i < targets; i++)
+        {
+            Enemy targetEnemy = otherEnemies[i];
+            Debug.Log($"{gameObject.name} electrified {targetEnemy.gameObject.name} for {electricChainDamage} damage.");
+            targetEnemy.Damage(electricChainDamage);
+        }
+    }
+
+    // Steam efektini uygulayan metod
+    private void ApplySteamEffect()
+    {
+        // Eðer zaten steam efekti aktifse, mevcut coroutine'i durdur
+        if (steamCoroutine != null)
+        {
+            StopCoroutine(steamCoroutine);
+        }
+
+        steamCoroutine = StartCoroutine(SteamEffectCoroutine());
+    }
+    private void ClearEffects()
+    {
+        // Mevcut Fire ve Water ve electric efektlerini durdur
+        if (fireCoroutine != null)
+        {
+            StopCoroutine(fireCoroutine);
+            fireCoroutine = null;
+        }
+        if (waterCoroutine != null)
+        {
+            StopCoroutine(waterCoroutine);
+            waterCoroutine = null;
+        }
+        if (electricCoroutine != null)
+        {
+            StopCoroutine(electricCoroutine);
+            electricCoroutine = null;
+        }
+        isFireActive = false;
+        isWaterActive = false;
+        isElectricActive = false;
+
+    }
+    private IEnumerator SteamEffectCoroutine()
+    {
+        isSteamActive = true;
+        Debug.Log($"{gameObject.name} is affected by steam!");
+
+       ClearEffects();
+
+        // Hareket hýzýný azalt
+        if (enemyMovement != null)
+        {
+            enemyMovement.SetSpeedMultiplier(1f - speedReductionFactor); // %80 azaltma için multiplier = 0.2
+        }
+
+        float elapsed = 0f;
+
+        while (elapsed < steamDuration)
+        {
+            TakeDamage(steamDamagePerSecond);
+            yield return new WaitForSeconds(1f);
+            elapsed += 1f;
+        }
+
+        // Hareket hýzýný eski haline getir
+        if (enemyMovement != null)
+        {
+            enemyMovement.SetSpeedMultiplier(1f); // Orijinal hýza geri dön
+            Debug.Log($"{gameObject.name}'s speed restored to original.");
+        }
+
+        isSteamActive = false;
+        Debug.Log($"{gameObject.name} is no longer affected by steam.");
+        steamCoroutine = null;
+    }
+
+    // Efekt durumlarýný loglayan metod (isteðe baðlý)
     private void LogCurrentEffects()
     {
-        List<string> activeEffects = new List<string>();
-
-        if (isFireActive)
-            activeEffects.Add("Fire");
-        if (isWaterActive)
-            activeEffects.Add("Water");
-        if (isSteamActive)
-            activeEffects.Add("Steam");
-
-        string effectString = activeEffects.Count > 0 ? string.Join(", ", activeEffects) : "None";
-
-        Debug.Log($"{gameObject.name} current effects: {effectString}");
+        Debug.Log($"Effects on {gameObject.name} - Fire: {isFireActive}, Water: {isWaterActive}, Electric: {isElectricActive}, Steam: {isSteamActive}");
     }
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, explosionRadius);
+    }
+
 }

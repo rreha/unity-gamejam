@@ -131,8 +131,8 @@ MonoBehaviour:
   whatDestroysBullet:
     serializedVersion: 2
     m_Bits: 64
-  bulletdamage: 5
-  bulletType: 1
+  bulletDamage: 10
+  bulletType: 3
 --- !u!58 &-6491443563548687456
 CircleCollider2D:
   m_ObjectHideFlags: 0
