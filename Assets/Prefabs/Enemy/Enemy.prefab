@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d30afa1fd1e76ed4588ab74ae04c039f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
+  maxHealth: 100
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d0851ec89e567b4293c80e821197061, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseMoveSpeed: 5
+  baseMoveSpeed: 3
 --- !u!95 &3687131979847439411
 Animator:
   serializedVersion: 5

@@ -11,7 +11,7 @@ public enum BulletType
 }
 public class BulletBehavior : MonoBehaviour
 {
-    [SerializeField] public float bullet_Speed = 10f;
+    [SerializeField] public float bullet_Speed = 20f;
     [SerializeField] public float bullet_Range = 10f; // Merminin menzili
 
     public LayerMask whatDestroysBullet;
@@ -47,10 +47,11 @@ public class BulletBehavior : MonoBehaviour
         if (enemy != null)
         {
             enemy.OnHit(bulletType, bulletDamage);
+            // Mermi çarptıktan sonra yok oluyor
+            Destroy(gameObject);
         }
 
-        // Mermi çarptıktan sonra yok oluyor
-        Destroy(gameObject);
+        
     }
 
     private void CheckRange()
