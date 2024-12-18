@@ -9,6 +9,7 @@ public class EnemyMovement : MonoBehaviour
     private float currentMoveSpeed; // Geçerli hareket hızı
     private Rigidbody2D rb; // Rigidbody2D referansı
     private Vector2 movement; // Hareket yönü
+    [SerializeField] private Animator animator; // Animator Referansı
 
     void Start()
     {
@@ -31,12 +32,25 @@ public class EnemyMovement : MonoBehaviour
         // Oyuncuya doğru yönü hesapla
         Vector2 direction = (player.position - transform.position).normalized;
         movement = direction;
+        UpdateAnimation(movement);
     }
 
     void FixedUpdate()
     {
         // Hareketi uygula
         rb.MovePosition(rb.position + movement * currentMoveSpeed * Time.fixedDeltaTime);
+    }
+
+    private void UpdateAnimation(Vector2 direction)
+    {
+        if (direction.x > 0)
+        {
+            animator.SetFloat("MoveDir", 1); // RightWalk animation
+        }
+        else if (direction.x < 0)
+        {
+            animator.SetFloat("MoveDir", -1); // LeftWalk animation
+        }
     }
 
     // Hareket hızını değiştiren metod

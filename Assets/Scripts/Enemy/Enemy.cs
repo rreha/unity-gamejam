@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// BulletType enum’unun doðru tanýmlandýðýndan emin olun
+// BulletType enumï¿½unun doï¿½ru tanï¿½mlandï¿½ï¿½ï¿½ndan emin olun
 
 
 public class Enemy : MonoBehaviour, IDamagable
@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour, IDamagable
     [SerializeField] public float maxHealth = 10f;
     private float currentHealth;
     public LayerMask enemyLayer;
-    // Coroutine referanslarý
+    // Coroutine referanslarï¿½
     private Coroutine fireCoroutine;
     private Coroutine waterCoroutine;
     private Coroutine electricCoroutine;
@@ -26,21 +26,22 @@ public class Enemy : MonoBehaviour, IDamagable
     // Electric efekti parametreleri
     private float electricDuration = 5f;
     private float electricChainDamage = 3f;
-    public int chainTimes = 1; // Zincirleme sayýsýný belirlemek için
+    public int chainTimes = 1; // Zincirleme sayï¿½sï¿½nï¿½ belirlemek iï¿½in
 
     // Steam efekti parametreleri
     private float steamDuration = 8f;
     private float steamDamagePerSecond = 1f;
-    private float speedReductionFactor = 0.8f; // %80 hýz azaltma
+    private float speedReductionFactor = 0.8f; // %80 hï¿½z azaltma
 
     // Referanslar
     private EnemyMovement enemyMovement;
 
-    // Efekt durum bayraklarý
+    // Efekt durum bayraklarï¿½
     private bool isFireActive = false;
     private bool isWaterActive = false;
     private bool isElectricActive = false;
     private bool isSteamActive = false;
+    public GameObject explosionPrefab;
 
 
     // Explosion efekti parametreleri
@@ -48,29 +49,29 @@ public class Enemy : MonoBehaviour, IDamagable
     private float explosionRadius = 5f;
 
 
-    // Coroutine referansý
+    // Coroutine referansï¿½
     private Coroutine waterElectricCoroutine;
 
     // Water-Electric efekt parametreleri
-    [SerializeField] private int waterElectricDuration = 7; // Efektin süresi (saniye)
-    [SerializeField] private float waterElectricDamage = 3f; // Her saniye verilecek hasar miktarý
-    [SerializeField] private float waterElectricRadius = 5f; // Zincir hasarýnýn uygulanacaðý yarýçap
+    [SerializeField] private int waterElectricDuration = 7; // Efektin sï¿½resi (saniye)
+    [SerializeField] private float waterElectricDamage = 3f; // Her saniye verilecek hasar miktarï¿½
+    [SerializeField] private float waterElectricRadius = 5f; // Zincir hasarï¿½nï¿½n uygulanacaï¿½ï¿½ yarï¿½ï¿½ap
 
     void Start()
     {
         currentHealth = maxHealth;
 
-        // EnemyMovement bileþenine referans al
+        // EnemyMovement bileï¿½enine referans al
         enemyMovement = GetComponent<EnemyMovement>();
         if (enemyMovement == null)
         {
             Debug.LogError("EnemyMovement component not found on Enemy.");
         }
 
-        LogCurrentEffects(); // Baþlangýçta logla
+        LogCurrentEffects(); // Baï¿½langï¿½ï¿½ta logla
     }
 
-    // Düþman mermi tarafýndan vurulduðunda çaðrýlan metod
+    // Dï¿½ï¿½man mermi tarafï¿½ndan vurulduï¿½unda ï¿½aï¿½rï¿½lan metod
     public void OnHit(BulletType bulletType, float damageAmount)
     {
         Debug.Log($"{gameObject.name} was hit by {bulletType} bullet for {damageAmount} damage.");
@@ -86,12 +87,12 @@ public class Enemy : MonoBehaviour, IDamagable
             case BulletType.electric:
                 ApplyElectricEffect();
                 break;
-            // Diðer mermi türlerini gerektiðinde ekleyebilirsiniz
+            // Diï¿½er mermi tï¿½rlerini gerektiï¿½inde ekleyebilirsiniz
             default:
                 break;
         }
 
-        // Merminin verdiði hasarý uygula
+        // Merminin verdiï¿½i hasarï¿½ uygula
         Damage(damageAmount);
 
         // Fire ve Water etkileri aktifse Steam efektini uygula
@@ -122,7 +123,7 @@ public class Enemy : MonoBehaviour, IDamagable
             Debug.Log($"{gameObject.name} receives {waterElectricDamage} chain damage due to Water-Electric effect.");
             TakeDamage(waterElectricDamage);
 
-            // Belirtilen yarýçap içinde bulunan tüm düþmanlarý bul
+            // Belirtilen yarï¿½ï¿½ap iï¿½inde bulunan tï¿½m dï¿½ï¿½manlarï¿½ bul
             Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, waterElectricRadius, enemyLayer);
 
             foreach (Collider2D enemyCollider in hitEnemies)
@@ -139,15 +140,16 @@ public class Enemy : MonoBehaviour, IDamagable
             yield return new WaitForSeconds(1f);
         }
 
-        // Coroutine tamamlandýðýnda referansý sýfýrla
+        // Coroutine tamamlandï¿½ï¿½ï¿½nda referansï¿½ sï¿½fï¿½rla
         waterElectricCoroutine = null;
     }
     private void ApplyExplosionEffect()
     {
         ClearEffects();
-        // Patlama yarýçapý içinde bulunan tüm düþmanlarý bul
+        // Patlama yarï¿½ï¿½apï¿½ iï¿½inde bulunan tï¿½m dï¿½ï¿½manlarï¿½ bul
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
-
+        Vector3 explosionPosition = new Vector3(transform.position.x, transform.position.y, 0);
+        Instantiate(explosionPrefab, explosionPosition, Quaternion.identity);
         foreach (Collider2D enemyCollider in hitEnemies)
         {
             Enemy enemy = enemyCollider.GetComponent<Enemy>();
@@ -158,7 +160,7 @@ public class Enemy : MonoBehaviour, IDamagable
             }
         }
     }
-    // IDamagable arayüzünden gelen Damage metodu
+    // IDamagable arayï¿½zï¿½nden gelen Damage metodu
     public void Damage(float damageAmount)
     {
         TakeDamage(damageAmount);
@@ -178,14 +180,14 @@ public class Enemy : MonoBehaviour, IDamagable
     private void Die()
     {
         Debug.Log($"{gameObject.name} died.");
-        // Düþmanýn yok edilmesi, skor arttýrma, animasyon oynatma gibi iþlemleri burada yapabilirsiniz
+        // Dï¿½ï¿½manï¿½n yok edilmesi, skor arttï¿½rma, animasyon oynatma gibi iï¿½lemleri burada yapabilirsiniz
         Destroy(gameObject);
     }
 
     // Fire efektini uygulayan metod
     private void ApplyFireEffect()
     {
-        // Eðer zaten fire efekti aktifse, mevcut coroutine'i durdur
+        // Eï¿½er zaten fire efekti aktifse, mevcut coroutine'i durdur
         if (fireCoroutine != null)
         {
             StopCoroutine(fireCoroutine);
@@ -216,7 +218,7 @@ public class Enemy : MonoBehaviour, IDamagable
     // Water efektini uygulayan metod
     private void ApplyWaterEffect()
     {
-        // Eðer zaten water efekti aktifse, mevcut coroutine'i durdur
+        // Eï¿½er zaten water efekti aktifse, mevcut coroutine'i durdur
         if (waterCoroutine != null)
         {
             StopCoroutine(waterCoroutine);
@@ -240,7 +242,7 @@ public class Enemy : MonoBehaviour, IDamagable
     // Electric efektini uygulayan metod
     private void ApplyElectricEffect()
     {
-        // Eðer zaten electric efekti aktifse, mevcut coroutine'i durdur
+        // Eï¿½er zaten electric efekti aktifse, mevcut coroutine'i durdur
         if (electricCoroutine != null)
         {
             StopCoroutine(electricCoroutine);
@@ -265,10 +267,10 @@ public class Enemy : MonoBehaviour, IDamagable
 
     private void ApplyElectricChainDamage()
     {
-        // Tüm Enemy objelerini bul
+        // Tï¿½m Enemy objelerini bul
         Enemy[] allEnemies = FindObjectsOfType<Enemy>();
 
-        // Kendini hariç tut
+        // Kendini hariï¿½ tut
         List<Enemy> otherEnemies = new List<Enemy>();
         foreach (var enemy in allEnemies)
         {
@@ -284,12 +286,12 @@ public class Enemy : MonoBehaviour, IDamagable
             return;
         }
 
-        // Diðer düþmanlarý mesafeye göre sýralayýn
+        // Diï¿½er dï¿½ï¿½manlarï¿½ mesafeye gï¿½re sï¿½ralayï¿½n
         otherEnemies.Sort((a, b) =>
             Vector3.Distance(transform.position, a.transform.position)
             .CompareTo(Vector3.Distance(transform.position, b.transform.position)));
 
-        // Zincirleme hasar vereceðiniz düþman sayýsýný belirleyin
+        // Zincirleme hasar vereceï¿½iniz dï¿½ï¿½man sayï¿½sï¿½nï¿½ belirleyin
         int targets = Mathf.Min(chainTimes, otherEnemies.Count);
 
         for (int i = 0; i < targets; i++)
@@ -303,7 +305,7 @@ public class Enemy : MonoBehaviour, IDamagable
     // Steam efektini uygulayan metod
     private void ApplySteamEffect()
     {
-        // Eðer zaten steam efekti aktifse, mevcut coroutine'i durdur
+        // Eï¿½er zaten steam efekti aktifse, mevcut coroutine'i durdur
         if (steamCoroutine != null)
         {
             StopCoroutine(steamCoroutine);
@@ -341,10 +343,10 @@ public class Enemy : MonoBehaviour, IDamagable
 
        ClearEffects();
 
-        // Hareket hýzýný azalt
+        // Hareket hï¿½zï¿½nï¿½ azalt
         if (enemyMovement != null)
         {
-            enemyMovement.SetSpeedMultiplier(1f - speedReductionFactor); // %80 azaltma için multiplier = 0.2
+            enemyMovement.SetSpeedMultiplier(1f - speedReductionFactor); // %80 azaltma iï¿½in multiplier = 0.2
         }
 
         float elapsed = 0f;
@@ -356,10 +358,10 @@ public class Enemy : MonoBehaviour, IDamagable
             elapsed += 1f;
         }
 
-        // Hareket hýzýný eski haline getir
+        // Hareket hï¿½zï¿½nï¿½ eski haline getir
         if (enemyMovement != null)
         {
-            enemyMovement.SetSpeedMultiplier(1f); // Orijinal hýza geri dön
+            enemyMovement.SetSpeedMultiplier(1f); // Orijinal hï¿½za geri dï¿½n
             Debug.Log($"{gameObject.name}'s speed restored to original.");
         }
 
@@ -368,7 +370,7 @@ public class Enemy : MonoBehaviour, IDamagable
         steamCoroutine = null;
     }
 
-    // Efekt durumlarýný loglayan metod (isteðe baðlý)
+    // Efekt durumlarï¿½nï¿½ loglayan metod (isteï¿½e baï¿½lï¿½)
     private void LogCurrentEffects()
     {
         Debug.Log($"Effects on {gameObject.name} - Fire: {isFireActive}, Water: {isWaterActive}, Electric: {isElectricActive}, Steam: {isSteamActive}");

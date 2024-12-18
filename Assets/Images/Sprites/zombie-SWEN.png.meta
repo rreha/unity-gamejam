@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 22f82453cd118455681529ad2ec26ecd
+guid: 8f40b3a7752fb42e68d8c2c71d9b2e07
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,12 +110,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: exp2_0_0
+      name: zombie-SWEN_0
       rect:
         serializedVersion: 2
         x: 0
         y: 192
-        width: 64
+        width: 48
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -124,19 +124,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 057cb2559baaf4f09ab3adfd004137f6
-      internalID: -192355444
+      spriteID: 11f4ceb89d97849b1a3076af4cba7340
+      internalID: 1376455765
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: exp2_0_1
+      name: zombie-SWEN_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 48
         y: 192
-        width: 64
+        width: 48
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -145,19 +145,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fc502cc5ccb3c4dab8c8edfa17b4dcde
-      internalID: -1762213991
+      spriteID: 427c4a847ff87439380118bf8bca3447
+      internalID: -688681396
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: exp2_0_2
+      name: zombie-SWEN_2
       rect:
         serializedVersion: 2
-        x: 128
+        x: 96
         y: 192
-        width: 64
+        width: 48
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -166,40 +166,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b8f56a48f0ba64d94b2a0956daae1510
-      internalID: 1446668041
+      spriteID: 63b86a06538e7418a90eb3b070d0d9e1
+      internalID: 920717462
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: exp2_0_3
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 192
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 65467734f30944b07ac6aa56becdbc05
-      internalID: 1718266025
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: exp2_0_4
+      name: zombie-SWEN_3
       rect:
         serializedVersion: 2
         x: 0
         y: 128
-        width: 64
+        width: 48
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -208,19 +187,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ed742ef5132cd4defaa98bcd7ae1339a
-      internalID: 1288799347
+      spriteID: cd67308239e9649d6ac03e4881495a3b
+      internalID: 500003849
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: exp2_0_5
+      name: zombie-SWEN_4
       rect:
         serializedVersion: 2
-        x: 64
+        x: 48
         y: 128
-        width: 64
+        width: 48
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -229,19 +208,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2b215760c1dac4eb59cec6d3b3dfbf0f
-      internalID: 1878783412
+      spriteID: 9f022ff5e370a41269056532737142f7
+      internalID: -19360766
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: exp2_0_6
+      name: zombie-SWEN_5
       rect:
         serializedVersion: 2
-        x: 128
+        x: 96
         y: 128
-        width: 64
+        width: 48
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -250,40 +229,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7fe47dffea6de4b368c7340a5d94e846
-      internalID: 1724536942
+      spriteID: 14646e2715ec64ee78b6b964b87089b6
+      internalID: -557104028
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: exp2_0_7
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 128
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 98d54bf430c90476a8e78846d1cbed4f
-      internalID: -19103495
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: exp2_0_8
+      name: zombie-SWEN_6
       rect:
         serializedVersion: 2
         x: 0
         y: 64
-        width: 64
+        width: 48
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -292,19 +250,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c12500b46f00e4de1ac8e915bd184166
-      internalID: -42579828
+      spriteID: 2cdfcd0ac9fca4fb19ee178a2f2112c6
+      internalID: -545922335
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: exp2_0_9
+      name: zombie-SWEN_7
       rect:
         serializedVersion: 2
-        x: 64
+        x: 48
         y: 64
-        width: 64
+        width: 48
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -313,19 +271,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e6cf01c601eb94ab99d296c6ee587ed3
-      internalID: 457448709
+      spriteID: 8d2dad5ea3e9841b08291bd496021640
+      internalID: -1071803397
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: exp2_0_10
+      name: zombie-SWEN_8
       rect:
         serializedVersion: 2
-        x: 128
+        x: 96
         y: 64
-        width: 64
+        width: 48
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -334,40 +292,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 79e2558358f194f83858a83c378d529d
-      internalID: 563903650
+      spriteID: ac76cc9d4609d43d3947f01519176dfd
+      internalID: 1070842440
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: exp2_0_11
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 64
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d506eafd07bd3400c9107fcb20eabe43
-      internalID: -2126308073
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: exp2_0_12
+      name: zombie-SWEN_9
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
+        width: 48
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -376,19 +313,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a5a8b5ac9efdf4df3b93eac680aaa61f
-      internalID: 1409123732
+      spriteID: 5981abb31ee13412da31e5a5aba8561f
+      internalID: -1131587645
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: exp2_0_13
+      name: zombie-SWEN_10
       rect:
         serializedVersion: 2
-        x: 64
+        x: 48
         y: 0
-        width: 64
+        width: 48
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -397,19 +334,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0830f5735f6ad4d458f680eac86d8655
-      internalID: 973684712
+      spriteID: d44f7eef78d674ce29009fdad543da39
+      internalID: 1230052329
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: exp2_0_14
+      name: zombie-SWEN_11
       rect:
         serializedVersion: 2
-        x: 128
+        x: 96
         y: 0
-        width: 64
+        width: 48
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -418,29 +355,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 69d75296ddacd4cbb8d1ce32c2f9959b
-      internalID: -676591280
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: exp2_0_15
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fdf1b600d55e047ffaa990699eee3b65
-      internalID: 779375276
+      spriteID: a7b62ecad983b4b11b0445c71a138ea9
+      internalID: 1102925067
       vertices: []
       indices: 
       edges: []
@@ -456,22 +372,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      exp2_0_0: -192355444
-      exp2_0_1: -1762213991
-      exp2_0_10: 563903650
-      exp2_0_11: -2126308073
-      exp2_0_12: 1409123732
-      exp2_0_13: 973684712
-      exp2_0_14: -676591280
-      exp2_0_15: 779375276
-      exp2_0_2: 1446668041
-      exp2_0_3: 1718266025
-      exp2_0_4: 1288799347
-      exp2_0_5: 1878783412
-      exp2_0_6: 1724536942
-      exp2_0_7: -19103495
-      exp2_0_8: -42579828
-      exp2_0_9: 457448709
+      zombie-SWEN_0: 1376455765
+      zombie-SWEN_1: -688681396
+      zombie-SWEN_10: 1230052329
+      zombie-SWEN_11: 1102925067
+      zombie-SWEN_2: 920717462
+      zombie-SWEN_3: 500003849
+      zombie-SWEN_4: -19360766
+      zombie-SWEN_5: -557104028
+      zombie-SWEN_6: -545922335
+      zombie-SWEN_7: -1071803397
+      zombie-SWEN_8: 1070842440
+      zombie-SWEN_9: -1131587645
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.894, y: 0.134, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 1.7, y: 1.7, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -76,12 +76,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.13453163, g: 0.12549019, b: 0.6509804, a: 1}
+  m_Sprite: {fileID: 2070177602, guid: cec9fc6c6618b4df99f1ac6360a34a45, type: 3}
+  m_Color: {r: 0.111739054, g: 0.42808938, b: 0.764151, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.32, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -131,7 +131,7 @@ MonoBehaviour:
   whatDestroysBullet:
     serializedVersion: 2
     m_Bits: 64
-  bulletdamage: 5
+  bulletDamage: 10
   bulletType: 2
 --- !u!58 &-6491443563548687456
 CircleCollider2D:
@@ -167,4 +167,4 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.13
