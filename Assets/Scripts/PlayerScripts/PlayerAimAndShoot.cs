@@ -1,24 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static BulletBehavior;
-
-[System.Serializable]
-public class  Player
-{
-    [SerializeField]public float maxHp;
-    // New stats
-    [SerializeField] public float maxMana = 100f;
-    [SerializeField] public float currentMana;
-    [SerializeField] public float manaRegenRate = 5f; // Mana per second
-    [SerializeField] public float attackSpeed = 1f; // Attacks per second
-    public Player()
-    {
-        currentMana = maxMana;
-    }
-}
 
 public class PlayerAimAndShoot : MonoBehaviour
 {
@@ -51,7 +37,11 @@ public class PlayerAimAndShoot : MonoBehaviour
     {
         if (playerStats == null)
         {
-            playerStats = new Player();
+            playerStats = FindObjectOfType<Player>();
+            if (playerStats == null)
+            {
+                Debug.LogError("Player instance not found in the scene.");
+            }
         }
     }
 

@@ -7,37 +7,38 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamagable
 {
+    [Header("Player Reference")]
+    public Player playerStats;
+
+
+    // EXP miktarı
+    [SerializeField] private int expOnDeath = 10; // Düşman öldüğünde verilecek EXP miktarı
+
+
     [SerializeField] public float maxHealth = 10f;
-    private float currentHealth;
+    [SerializeField] private float currentHealth;
     public LayerMask enemyLayer;
     // Coroutine referanslar�
     private Coroutine fireCoroutine;
     private Coroutine waterCoroutine;
     private Coroutine electricCoroutine;
     private Coroutine steamCoroutine;
+    private Coroutine waterElectricCoroutine;
 
-    // Fire efekti parametreleri
-    private float fireDuration = 5f;
-    private float fireDamagePerSecond = 1f;
     public GameObject firePrefab;
 
-    // Water efekti parametreleri
-    private float waterDuration = 5f;
+   
     public GameObject waterPrefab;
 
     // Electric efekti parametreleri
-    private float electricDuration = 5f;
     public GameObject electricPrefab;
-    private float electricChainDamage = 3f;
     public GameObject electricChainPrefab;
-    public int chainTimes = 1; // Zincirleme say�s�n� belirlemek i�in
 
     // Steam efekti parametreleri
-    private float steamDuration = 8f;
-    private float steamDamagePerSecond = 1f;
+    
     public GameObject steamPrefab;
-    private float speedReductionFactor = 0.8f; // %80 h�z azaltma
     public GameObject explosionPrefab;
+
 
     // Referanslar
     private EnemyMovement enemyMovement;
@@ -48,19 +49,11 @@ public class Enemy : MonoBehaviour, IDamagable
     private bool isElectricActive = false;
     private bool isSteamActive = false;
 
-
-    // Explosion efekti parametreleri
-    private float explosionDamage = 15f;
-    private float explosionRadius = 5f;
+      
 
 
-    // Coroutine referans�
-    private Coroutine waterElectricCoroutine;
-
-    // Water-Electric efekt parametreleri
-    [SerializeField] private int waterElectricDuration = 7; // Efektin s�resi (saniye)
-    [SerializeField] private float waterElectricDamage = 3f; // Her saniye verilecek hasar miktar�
-    [SerializeField] private float waterElectricRadius = 5f; // Zincir hasar�n�n uygulanaca�� yar��ap
+   
+ 
 
     void Start()
     {
@@ -72,7 +65,15 @@ public class Enemy : MonoBehaviour, IDamagable
         {
             Debug.LogError("EnemyMovement component not found on Enemy.");
         }
-
+        // Find the Player in the scene if not assigned
+        if (playerStats == null)
+        {
+            playerStats = FindObjectOfType<Player>();
+            if (playerStats == null)
+            {
+                Debug.LogError("Player instance not found in the scene.");
+            }
+        }
         LogCurrentEffects(); // Ba�lang��ta logla
     }
 
@@ -122,14 +123,14 @@ public class Enemy : MonoBehaviour, IDamagable
     {
         Debug.Log($"{gameObject.name} is affected by the Water-Electric combination!");
         ClearEffects();
-        for (int i = 0; i < waterElectricDuration; i++)
+        for (int i = 0; i < playerStats.waterElectricDuration; i++)
         {
             // Kendisine hasar uygula
-            Debug.Log($"{gameObject.name} receives {waterElectricDamage} chain damage due to Water-Electric effect.");
-            TakeDamage(waterElectricDamage);
+            Debug.Log($"{gameObject.name} receives {playerStats.waterElectricDamage} chain damage due to Water-Electric effect.");
+            TakeDamage(playerStats.waterElectricDamage);
 
             // Belirtilen yar��ap i�inde bulunan t�m d��manlar� bul
-            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, waterElectricRadius, enemyLayer);
+            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, playerStats.waterElectricRadius, enemyLayer);
 
             foreach (Collider2D enemyCollider in hitEnemies)
             {
@@ -138,8 +139,8 @@ public class Enemy : MonoBehaviour, IDamagable
                 electricChainEffect.transform.parent = enemy.transform;
                 if (enemy != null && enemy != this)
                 {
-                    Debug.Log($"{gameObject.name}'s Water-Electric effect deals {waterElectricDamage} damage to {enemy.gameObject.name}.");
-                    enemy.Damage(waterElectricDamage);
+                    Debug.Log($"{gameObject.name}'s Water-Electric effect deals {playerStats.waterElectricDamage} damage to {enemy.gameObject.name}.");
+                    enemy.Damage(playerStats.waterElectricDamage);
                 }
             }
 
@@ -154,7 +155,7 @@ public class Enemy : MonoBehaviour, IDamagable
     {
         ClearEffects();
         // Patlama yar��ap� i�inde bulunan t�m d��manlar� bul
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, playerStats.explosionRadius);
         Vector3 explosionPosition = new Vector3(transform.position.x, transform.position.y, 0);
         Instantiate(explosionPrefab, explosionPosition, Quaternion.identity);
         foreach (Collider2D enemyCollider in hitEnemies)
@@ -162,8 +163,8 @@ public class Enemy : MonoBehaviour, IDamagable
             Enemy enemy = enemyCollider.GetComponent<Enemy>();
             if (enemy != null && enemy != this)
             {
-                Debug.Log($"{gameObject.name}'s explosion deals {explosionDamage} damage to {enemy.gameObject.name}.");
-                enemy.Damage(explosionDamage);
+                Debug.Log($"{gameObject.name}'s explosion deals {playerStats.explosionDamage} damage to {enemy.gameObject.name}.");
+                enemy.Damage(playerStats.explosionDamage);
             }
         }
     }
@@ -187,6 +188,8 @@ public class Enemy : MonoBehaviour, IDamagable
     private void Die()
     {
         Debug.Log($"{gameObject.name} died.");
+
+        ExperienceManager.instance.AddExperience(expOnDeath);
         // D��man�n yok edilmesi, skor artt�rma, animasyon oynatma gibi i�lemleri burada yapabilirsiniz
         Destroy(gameObject);
     }
@@ -212,9 +215,9 @@ public class Enemy : MonoBehaviour, IDamagable
 
         float elapsed = 0f;
 
-        while (elapsed < fireDuration)
+        while (elapsed < playerStats.fireDuration)
         {
-            TakeDamage(fireDamagePerSecond);
+            TakeDamage(playerStats.fireDamagePerSecond);
             yield return new WaitForSeconds(1f);
             elapsed += 1f;
         }
@@ -244,7 +247,7 @@ public class Enemy : MonoBehaviour, IDamagable
         GameObject waterEffect = Instantiate(waterPrefab, transform.position, Quaternion.identity);
         waterEffect.transform.parent = transform;
 
-        yield return new WaitForSeconds(waterDuration);
+        yield return new WaitForSeconds(playerStats.waterDuration);
 
         isWaterActive = false;
         Destroy(waterEffect);
@@ -273,8 +276,13 @@ public class Enemy : MonoBehaviour, IDamagable
         GameObject electricEffect = Instantiate(electricPrefab, transform.position, Quaternion.identity);
         electricEffect.transform.parent = transform;
 
-        yield return new WaitForSeconds(electricDuration);
+
+        yield return new WaitForSeconds(playerStats.electricDuration);
         
+
+        yield return new WaitForSeconds(playerStats.electricDuration);
+
+
         isElectricActive = false;
         Destroy(electricEffect);
         Debug.Log($"{gameObject.name} is no longer electrified.");
@@ -308,13 +316,13 @@ public class Enemy : MonoBehaviour, IDamagable
             .CompareTo(Vector3.Distance(transform.position, b.transform.position)));
 
         // Zincirleme hasar verece�iniz d��man say�s�n� belirleyin
-        int targets = Mathf.Min(chainTimes, otherEnemies.Count);
+        float targets = Mathf.Min(playerStats.chainTimes, otherEnemies.Count);
 
         for (int i = 0; i < targets; i++)
         {
             Enemy targetEnemy = otherEnemies[i];
-            Debug.Log($"{gameObject.name} electrified {targetEnemy.gameObject.name} for {electricChainDamage} damage.");
-            targetEnemy.Damage(electricChainDamage);
+            Debug.Log($"{gameObject.name} electrified {targetEnemy.gameObject.name} for {playerStats.electricChainDamage} damage.");
+            targetEnemy.Damage(playerStats.electricChainDamage);
         }
     }
 
@@ -364,14 +372,14 @@ public class Enemy : MonoBehaviour, IDamagable
         // Hareket h�z�n� azalt
         if (enemyMovement != null)
         {
-            enemyMovement.SetSpeedMultiplier(1f - speedReductionFactor); // %80 azaltma i�in multiplier = 0.2
+            enemyMovement.SetSpeedMultiplier(1f - playerStats.speedReductionFactor); // %80 azaltma i�in multiplier = 0.2
         }
 
         float elapsed = 0f;
 
-        while (elapsed < steamDuration)
+        while (elapsed < playerStats.steamDuration)
         {
-            TakeDamage(steamDamagePerSecond);
+            TakeDamage(playerStats.steamDamagePerSecond);
             yield return new WaitForSeconds(1f);
             elapsed += 1f;
         }
@@ -394,10 +402,8 @@ public class Enemy : MonoBehaviour, IDamagable
     {
         Debug.Log($"Effects on {gameObject.name} - Fire: {isFireActive}, Water: {isWaterActive}, Electric: {isElectricActive}, Steam: {isSteamActive}");
     }
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, explosionRadius);
-    }
+
+
+
 
 }

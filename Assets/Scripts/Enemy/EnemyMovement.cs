@@ -14,7 +14,7 @@ public class EnemyMovement : MonoBehaviour
     void Start()
     {
         // Oyuncuyu bul
-        player = FindObjectOfType<PlayerMovement>().transform;
+        player = FindObjectOfType<Player>().transform;
 
         // Rigidbody2D bileşenini al
         rb = GetComponent<Rigidbody2D>();

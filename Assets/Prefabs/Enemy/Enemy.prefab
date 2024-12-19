@@ -173,7 +173,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d30afa1fd1e76ed4588ab74ae04c039f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  playerStats: {fileID: 0}
+  expOnDeath: 10
+  maxHealth: 5
+  currentHealth: 0
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -181,12 +184,8 @@ MonoBehaviour:
   waterPrefab: {fileID: 4116858857064333960, guid: 995e3771bb6bc4e80b346ee3c8782f57, type: 3}
   electricPrefab: {fileID: 6532621569103595410, guid: ebc95d2c8331140aa8660044d3655b59, type: 3}
   electricChainPrefab: {fileID: 2580978833544848655, guid: 40d729efbcc8d4398818cf666f464aa9, type: 3}
-  chainTimes: 1
   steamPrefab: {fileID: 1965162235968009015, guid: 280c486d166774ad7b8b198312ec9834, type: 3}
   explosionPrefab: {fileID: 6067555313974084353, guid: 5bf203d858ed847418d23e0924d62c0d, type: 3}
-  waterElectricDuration: 7
-  waterElectricDamage: 3
-  waterElectricRadius: 5
 --- !u!114 &-3531586764805108983
 MonoBehaviour:
   m_ObjectHideFlags: 0
