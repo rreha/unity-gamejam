@@ -3,7 +3,12 @@ guid: d30afa1fd1e76ed4588ab74ae04c039f
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - enemyObj: {instanceID: 0}
+  - firePrefab: {instanceID: 0}
+  - waterPrefab: {instanceID: 0}
+  - electricPrefab: {instanceID: 0}
+  - explosionPrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

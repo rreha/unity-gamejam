@@ -19,19 +19,25 @@ public class Enemy : MonoBehaviour, IDamagable
     // Fire efekti parametreleri
     private float fireDuration = 5f;
     private float fireDamagePerSecond = 1f;
+    public GameObject firePrefab;
 
     // Water efekti parametreleri
     private float waterDuration = 5f;
+    public GameObject waterPrefab;
 
     // Electric efekti parametreleri
     private float electricDuration = 5f;
+    public GameObject electricPrefab;
     private float electricChainDamage = 3f;
+    public GameObject electricChainPrefab;
     public int chainTimes = 1; // Zincirleme say�s�n� belirlemek i�in
 
     // Steam efekti parametreleri
     private float steamDuration = 8f;
     private float steamDamagePerSecond = 1f;
+    public GameObject steamPrefab;
     private float speedReductionFactor = 0.8f; // %80 h�z azaltma
+    public GameObject explosionPrefab;
 
     // Referanslar
     private EnemyMovement enemyMovement;
@@ -41,7 +47,6 @@ public class Enemy : MonoBehaviour, IDamagable
     private bool isWaterActive = false;
     private bool isElectricActive = false;
     private bool isSteamActive = false;
-    public GameObject explosionPrefab;
 
 
     // Explosion efekti parametreleri
@@ -129,6 +134,8 @@ public class Enemy : MonoBehaviour, IDamagable
             foreach (Collider2D enemyCollider in hitEnemies)
             {
                 Enemy enemy = enemyCollider.GetComponent<Enemy>();
+                GameObject electricChainEffect = Instantiate(electricChainPrefab, enemy.transform.position, Quaternion.identity);
+                electricChainEffect.transform.parent = enemy.transform;
                 if (enemy != null && enemy != this)
                 {
                     Debug.Log($"{gameObject.name}'s Water-Electric effect deals {waterElectricDamage} damage to {enemy.gameObject.name}.");
@@ -200,6 +207,8 @@ public class Enemy : MonoBehaviour, IDamagable
     {
         isFireActive = true;
         Debug.Log($"{gameObject.name} is on fire!");
+        GameObject fireEffect = Instantiate(firePrefab, transform.position, Quaternion.identity);
+        fireEffect.transform.parent = transform;
 
         float elapsed = 0f;
 
@@ -211,6 +220,7 @@ public class Enemy : MonoBehaviour, IDamagable
         }
 
         isFireActive = false;
+        Destroy(fireEffect);
         Debug.Log($"{gameObject.name} is no longer on fire.");
         fireCoroutine = null;
     }
@@ -231,10 +241,13 @@ public class Enemy : MonoBehaviour, IDamagable
     {
         isWaterActive = true;
         Debug.Log($"{gameObject.name} is affected by water!");
+        GameObject waterEffect = Instantiate(waterPrefab, transform.position, Quaternion.identity);
+        waterEffect.transform.parent = transform;
 
         yield return new WaitForSeconds(waterDuration);
 
         isWaterActive = false;
+        Destroy(waterEffect);
         Debug.Log($"{gameObject.name} is no longer affected by water.");
         waterCoroutine = null;
     }
@@ -257,10 +270,13 @@ public class Enemy : MonoBehaviour, IDamagable
     {
         isElectricActive = true;
         Debug.Log($"{gameObject.name} is electrified!");
+        GameObject electricEffect = Instantiate(electricPrefab, transform.position, Quaternion.identity);
+        electricEffect.transform.parent = transform;
 
         yield return new WaitForSeconds(electricDuration);
-
+        
         isElectricActive = false;
+        Destroy(electricEffect);
         Debug.Log($"{gameObject.name} is no longer electrified.");
         electricCoroutine = null;
     }
@@ -340,8 +356,10 @@ public class Enemy : MonoBehaviour, IDamagable
     {
         isSteamActive = true;
         Debug.Log($"{gameObject.name} is affected by steam!");
+        GameObject steamEffect = Instantiate(steamPrefab, transform.position, Quaternion.identity);
+        steamEffect.transform.parent = transform;
 
-       ClearEffects();
+        ClearEffects();
 
         // Hareket h�z�n� azalt
         if (enemyMovement != null)
@@ -366,6 +384,7 @@ public class Enemy : MonoBehaviour, IDamagable
         }
 
         isSteamActive = false;
+        Destroy(steamEffect);
         Debug.Log($"{gameObject.name} is no longer affected by steam.");
         steamCoroutine = null;
     }

@@ -121,7 +121,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.018, y: -0.06}
+  m_Offset: {x: -0.023913383, y: -0.06871562}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -132,7 +132,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.28, y: 0.525}
+  m_Size: {x: 0.22705317, y: 0.49889877}
   m_EdgeRadius: 0
 --- !u!50 &8614305558005709486
 Rigidbody2D:
@@ -177,7 +177,12 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
+  firePrefab: {fileID: 189876381488700273, guid: f4768d5d7b0b141059eaf866d8347b52, type: 3}
+  waterPrefab: {fileID: 4116858857064333960, guid: 995e3771bb6bc4e80b346ee3c8782f57, type: 3}
+  electricPrefab: {fileID: 6532621569103595410, guid: ebc95d2c8331140aa8660044d3655b59, type: 3}
+  electricChainPrefab: {fileID: 2580978833544848655, guid: 40d729efbcc8d4398818cf666f464aa9, type: 3}
   chainTimes: 1
+  steamPrefab: {fileID: 1965162235968009015, guid: 280c486d166774ad7b8b198312ec9834, type: 3}
   explosionPrefab: {fileID: 6067555313974084353, guid: 5bf203d858ed847418d23e0924d62c0d, type: 3}
   waterElectricDuration: 7
   waterElectricDamage: 3
