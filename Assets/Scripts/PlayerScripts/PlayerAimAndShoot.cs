@@ -77,6 +77,7 @@ public class PlayerAimAndShoot : MonoBehaviour
 
             // Deduct mana
             playerStats.currentMana -= manaCost;
+            playerStats.UpdateUI();
 
             // Spawn bullet based on type
             switch (bulletType)
@@ -139,6 +140,7 @@ public class PlayerAimAndShoot : MonoBehaviour
             playerStats.currentMana += playerStats.manaRegenRate * Time.deltaTime;
             playerStats.currentMana = Mathf.Min(playerStats.currentMana, playerStats.maxMana);
         }
+        playerStats.UpdateUI();
     }
     private void Aim()
     {

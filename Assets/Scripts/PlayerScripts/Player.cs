@@ -1,11 +1,16 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement; // Ana menüye dönmek için gerekli
+using TMPro; // Ekleme: TextMeshPro kullanýyorsanýz
 
 
 public class Player : MonoBehaviour
 {
-
+    // Ekleme: UI elemanlarýný referans olarak ekleyin
+    public TextMeshProUGUI healthText;
+    public TextMeshProUGUI manaText;
+    [Header("Player Stats")]
     // Fire efekti parametreleri
     public float fireDuration = 5f;
     public float fireDamagePerSecond = 1f;
@@ -51,8 +56,16 @@ public class Player : MonoBehaviour
 
         currentMana = maxMana;
         currentHp = maxHp;
-    }
 
+        UpdateUI();
+
+    }
+    // Ekleme: UI'yý güncelleyen metod
+    public void UpdateUI()
+    {
+        healthText.text = $"HP: {currentHp}/{maxHp}";
+        manaText.text = $"Mana: {currentMana}/{maxMana}";
+    }
     // Düþmanla çarpýþma baþladýðýnda çaðrýlýr
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -73,7 +86,7 @@ public class Player : MonoBehaviour
         {
             currentHp -= damagePerSecond;
             Debug.Log($"Player took {damagePerSecond} damage from Enemy collision. Current HP: {currentHp}");
-
+            UpdateUI();
             if (currentHp <= 0)
             {
                 Die();
@@ -112,12 +125,14 @@ public class Player : MonoBehaviour
         maxHp += hp;
         currentHp += hp;
         Debug.Log($"Player health increased by {hp}. New Max HP: {maxHp}");
+        UpdateUI();
 
     }
     public void IncreaseMaxMana(float mana)
     {
         maxMana += mana;
         Debug.Log($"Player mana increased by {mana}. New Max mana: {maxMana}");
+        UpdateUI();
 
     }
     public void IncreaseManaRegenRate(float regen)
