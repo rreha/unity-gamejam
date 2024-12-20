@@ -1,4 +1,7 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement; // Ana menüye dönmek için gerekli
+
 
 public class Player : MonoBehaviour
 {
@@ -27,7 +30,7 @@ public class Player : MonoBehaviour
     [SerializeField] public float waterElectricDamage = 3f; // Her saniye verilecek hasar miktar?
     [SerializeField] public float waterElectricRadius = 5f; // Zincir hasar?n?n uygulanaca?? yar??ap
 
-    [SerializeField] public float maxHp;
+    [SerializeField] public float maxHp = 100f;
     [SerializeField] public float currentHp;
 
     // New stats
@@ -35,10 +38,75 @@ public class Player : MonoBehaviour
     [SerializeField] public float currentMana;
     [SerializeField] public float manaRegenRate = 5f; // Mana per second
     [SerializeField] public float attackSpeed = 1f; // Attacks per second
-    public Player()
+
+
+
+
+
+    private Coroutine damageCoroutine;
+
+
+    private void Start()
     {
+
         currentMana = maxMana;
+        currentHp = maxHp;
     }
+
+    // Düþmanla çarpýþma baþladýðýnda çaðrýlýr
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            if (damageCoroutine == null)
+            {
+                damageCoroutine = StartCoroutine(TakeDamageOverTime(5f));
+            }
+        }
+    }
+
+
+    // Belirli bir saniye aralýðýnda sürekli hasar almayý saðlayan Coroutine
+    private IEnumerator TakeDamageOverTime(float damagePerSecond)
+    {
+        while (true)
+        {
+            currentHp -= damagePerSecond;
+            Debug.Log($"Player took {damagePerSecond} damage from Enemy collision. Current HP: {currentHp}");
+
+            if (currentHp <= 0)
+            {
+                Die();
+                yield break; // Coroutine'i sonlandýr
+            }
+
+            yield return new WaitForSeconds(1f); // 1 saniye bekle
+        }
+    }
+
+    // Oyuncu öldüðünde çaðrýlan metod
+    private void Die()
+    {
+        Debug.Log("Player has died. Returning to Main Menu.");
+        SceneManager.LoadScene("MainMenu"); // "MainMenu" sahnesinin doðru isimde olduðundan emin olun
+    }
+
+    // Düþmanla çarpýþma bittiðinde çaðrýlýr
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            if (damageCoroutine != null)
+            {
+                StopCoroutine(damageCoroutine);
+                damageCoroutine = null;
+            }
+        }
+    }
+
+
+
+
     public void IncreaseMaxHP(float hp)
     {
         maxHp += hp;

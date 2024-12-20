@@ -11,7 +11,7 @@ public enum BulletType
 }
 public class BulletBehavior : MonoBehaviour
 {
-    [SerializeField] public float bullet_Speed = 20f;
+    [SerializeField] public float bullet_Speed = 30f;
     [SerializeField] public float bullet_Range = 10f; // Merminin menzili
 
     public LayerMask whatDestroysBullet;
