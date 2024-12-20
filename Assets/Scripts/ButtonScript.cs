@@ -21,13 +21,18 @@ public class ButtonScript : MonoBehaviour
     }
     public void loadGame()
     {
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene(3);
     }
 
-    /*public void loadCredits()
+    public void loadSettings()
+    {
+        SceneManager.LoadScene("Settings");
+    }
+
+    public void loadCredits()
     {
         SceneManager.LoadScene("Credits");
-    }*/
+    }
     public void exitGame() 
     {
         Application.Quit();
